@@ -1,0 +1,11 @@
+
+
+
+NEEDED TO RUN
+
+
+g++ main.cpp -o prog -lsfml-graphics -lsfml-window -lsfml-system
+
+
+Permission to write
+chmod u+x example.sh
