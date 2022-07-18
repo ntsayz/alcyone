@@ -1,10 +1,15 @@
-#include "Spaceship.h"
+#include "Ship.h"
 #include <SFML/Graphics.hpp>
+
 
 int main()
 {
+    //CONSTANTS
+    std::string PLAYER_FNAME = "resources/S001_1_36.png";
+    sf::Vector2u WINDOW_SIZE(600,600);
 
-    sf::RenderWindow window(sf::VideoMode(600, 600), "Test");
+    sf::Clock clock;
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "ALCYONE");
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
 
@@ -21,7 +26,8 @@ int main()
     playerSprite.setPosition(playerPos);
 
     float xVel = 2, yVel= 2;
-    
+
+    Ship ship(PLAYER_FNAME, WINDOW_SIZE);
 
 
 
@@ -37,18 +43,19 @@ int main()
                     window.close();
                     break;
                 case sf::Event::KeyPressed:
-                        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-                            //xVel +=2 ;
-                            //playerPos.x -= xVel;
-                        }
+                        ship.update(event,WINDOW_SIZE);
                         break;
                 case sf::Event::KeyReleased:
                 default:
                     break;
             }
         }
+
         // Clear the screen
         window.clear(sf::Color::Black);
+
+        float delta = clock.restart().asSeconds();
+
 
         if(playerPos.x < 0 || playerPos.x > 600 - 62) xVel *= -1;
         if(playerPos.y < 0  || playerPos.y > 600-105) yVel *= -1;
@@ -57,7 +64,8 @@ int main()
         playerPos.y += yVel;
 
         playerSprite.setPosition(playerPos);
-    
+
+        ship.draw(window);
         window.draw(playerSprite);
 
         // Display window contents on screen
