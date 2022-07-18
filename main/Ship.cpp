@@ -26,14 +26,14 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
     const float dAcc = 0.3f;
 
     // set acceleration
-    //sf::Keyboard::Key::W == event.key.code
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+    //
+    if (sf::Keyboard::Key::W == event.key.code)
       acceleration.y -= dAcc;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    if (sf::Keyboard::Key::A == event.key.code)
       acceleration.x -= dAcc;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    if (sf::Keyboard::Key::S == event.key.code)
       acceleration.y += dAcc;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    if (sf::Keyboard::Key::D == event.key.code)
       acceleration.x += dAcc;
 
     // update velocity through accelerationss
@@ -44,6 +44,9 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
     // update position through velocity
     x += velocity.x;
     y += velocity.y;
+
+    if(x < 0 || x > wsize.x - 62) velocity.x *=-1;x += velocity.x ;
+    if(y < 0 || y > wsize.y -105) velocity.y *=-1;y += velocity.y;
     // apply damping to the velocity
     velocity = 0.99f * velocity;
     shipSprite.setPosition(x, y);
