@@ -1,0 +1,32 @@
+#include <SFML/Graphics.hpp>
+
+
+int main(){
+        // Create the main rendering window
+    /*sf::Texture player;
+    if(!player.loadFromFile("resources/S001_1_36.png")){
+        return -1;
+    }
+    player.setSmooth(true);
+
+    sf::Sprite playerSprite;
+    playerSprite.setTexture(player);
+    sf::Vector2f playerPos(300,300);
+    playerSprite.setPosition(playerPos);
+
+    float xVel = 2, yVel= 2;
+*/
+
+
+/*
+        if(playerPos.x < 0 || playerPos.x > 600 - 62) xVel *= -1;
+        if(playerPos.y < 0  || playerPos.y > 600-105) yVel *= -1;
+        
+        playerPos.x += xVel;
+        playerPos.y += yVel;
+
+        playerSprite.setPosition(playerPos);
+        window.draw(playerSprite);
+
+*/
+}
