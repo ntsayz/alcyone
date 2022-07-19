@@ -24,11 +24,7 @@ void Ship::draw(sf::RenderWindow &window){
 }
 void Ship::update(sf::Event event, sf::Vector2u wsize, sf::RenderWindow &window){
     
-    // adjust this at will
-    const float dAcc = 0.02f;
-
     // set acceleration
-    //
     if (sf::Keyboard::Key::W == event.key.code)
       acceleration.y -= dAcc;
     if (sf::Keyboard::Key::A == event.key.code)
@@ -38,21 +34,55 @@ void Ship::update(sf::Event event, sf::Vector2u wsize, sf::RenderWindow &window)
     if (sf::Keyboard::Key::D == event.key.code)
       acceleration.x += dAcc;
 
-    // update velocity through accelerationss
-    velocity += acceleration;
+    // Collision with window bounds
+    
+    sf::Vector2f reset;
+    if(x <= 0){
+      x = 0;
+      reset = {x,y};
+      velocity.x *=-1;
+      acceleration.x = 0;
+      shipSprite.setPosition(reset);
+    }
+    else if(x >= wsize.x - shipWidth){
+      x = wsize.x - shipWidth;
+      reset = {x,y};
+      velocity.x *=-1;
+      acceleration.x = 0;
+      shipSprite.setPosition(reset);
+    }
+    if(y <= 0){
+      y = 0;
+      reset = {x,y};
+      velocity.y *=-1;
+      acceleration.y = 0;
+      shipSprite.setPosition(reset);
+    }
+    else if(y >= wsize.y - shipLength){
+      y = wsize.y - shipLength;
+      reset = {x,y};
+      velocity.y *=-1;
+      acceleration.y = 0;
+      shipSprite.setPosition(reset);
+      
+    }
 
-    if(x <= 0 || x >= wsize.x - 62) velocity.x *=-1;
-    if(y <= 0 || y >= wsize.y -105) velocity.y *=-1;
-    // update position through velocity
+    //changing velocity with acceleration and friction force
+
+    velocity += acceleration;
+    FRICTIONF = FRICTION_COEF * velocity;
+    velocity -= FRICTIONF;
+
+    
+    // update position through velocity 
     x += velocity.x;
     y += velocity.y;
 
-    if(x <= 0 || x > wsize.x - 62) velocity.x *=-1;x += velocity.x ;
-    if(y <= 0 || y > wsize.y -105) velocity.y *=-1;y += velocity.y;
-    // apply damping to the velocity
-    velocity = 0.1f * velocity;
-    std::cout << x << " - x" << y << " - y" << std::endl;
-    std::cout << velocity.x << "VelX" << velocity.y << "Vel Y" << std::endl;
+    
+    std::cout << x << " x " << y << "  y" << std::endl;
+    std::cout << velocity.x << " VelX " << velocity.y << " Vel Y" << std::endl;
+
+
     shipSprite.setPosition(x, y);
 
     window.draw(shipSprite);

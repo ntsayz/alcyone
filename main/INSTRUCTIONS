@@ -3,7 +3,7 @@
 
 NEEDED TO RUN
 
-g++ main.cpp -o prog -lsfml-graphics -lsfml-window -lsfml-system
+g++ main.cpp Ship.cpp -lsfml-graphics -lsfml-window -lsfml-system
 
 ./prog
 
