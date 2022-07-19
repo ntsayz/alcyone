@@ -40,7 +40,7 @@ int main()
                     break;
                 case sf::Event::KeyPressed:
                 case sf::Event::KeyReleased:
-                        ship.update(event,WINDOW_SIZE,window);
+                        //ship.update(event,WINDOW_SIZE);
                         break;
                 default:
                     break;
@@ -53,8 +53,8 @@ int main()
         //float delta = clock.restart().asSeconds();
 
         window.draw(back);
-        ship.update(event,WINDOW_SIZE,window);
-        //ship.draw(window);
+        ship.update(event,WINDOW_SIZE);
+        window.draw(ship.getShipSprite());
         
         // Display window contents on screen
         

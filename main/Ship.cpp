@@ -22,7 +22,7 @@ Ship::Ship(std::string fname, sf::Vector2u size){
 void Ship::draw(sf::RenderWindow &window){
   window.draw(shipSprite);
 }
-void Ship::update(sf::Event event, sf::Vector2u wsize, sf::RenderWindow &window){
+void Ship::update(sf::Event event, sf::Vector2u wsize){
     
     // set acceleration
     if (sf::Keyboard::Key::W == event.key.code)
@@ -85,10 +85,13 @@ void Ship::update(sf::Event event, sf::Vector2u wsize, sf::RenderWindow &window)
 
     shipSprite.setPosition(x, y);
 
-    window.draw(shipSprite);
+    //window.draw(shipSprite);
 
 }
 
-sf::Vector2f Ship::getShip(){
+sf::Vector2f const Ship::getShipPos(){
     return shipSprite.getPosition();
+}
+sf::Sprite const Ship::getShipSprite(){
+  return shipSprite;
 }

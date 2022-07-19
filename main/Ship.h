@@ -14,8 +14,9 @@ class Ship{
     public:
         Ship(std::string fname , sf::Vector2u size);
         void draw( sf::RenderWindow &window);
-        void update(sf::Event event, sf::Vector2u wsize, sf::RenderWindow &window);
-        sf::Vector2f getShip();
+        void update(sf::Event event, sf::Vector2u wsize);
+        sf::Sprite const getShipSprite();
+        sf::Vector2f const getShipPos();
 
 
 };
