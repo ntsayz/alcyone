@@ -1,2 +1,2 @@
-# alcyonE
-2D Arcade Space Shooter (In development)
+# Project: alcyone
+Unnamed 2D Arcade Space Shooter (In development)
