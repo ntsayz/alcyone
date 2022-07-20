@@ -6,7 +6,7 @@ class Bullet{
     private:
         sf::Texture bulletTexture_;
         sf::Sprite bulletSprite_;
-        sf::Vector2f acceleration, velocity;
+        sf::Vector2f acceleration_, velocity_;
     public:
         Bullet(std::string fname);
 

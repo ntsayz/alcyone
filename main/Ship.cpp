@@ -3,12 +3,12 @@
 Ship::Ship(std::string fname, sf::Vector2u size){
 
     if(!ship.loadFromFile(fname)){
-
+      std::cerr << "Failed to load a file" << std::endl;
     }
     ship.setSmooth(true);
     shipSprite.setTexture(ship);
-    x = size.x/2;
-    y = size.y/2;
+    x = size.x/2u;
+    y = size.y/2u;
     sf::Vector2f playerPos(x,y);
     shipSprite.setPosition(playerPos);
     }
@@ -25,7 +25,8 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
     if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(0.05f);}
 
     //accelerate if it turns enough
-    //if(shipSprite.getRotation() > 0) acceleration.x +=0.01;
+    if(shipSprite.getRotation() == 0.05f) shipSprite.setRotation(0.05f);
+    if(shipSprite.getRotation() == -0.05f) shipSprite.setRotation(-0.05f);
 
 
     // Collision with window bounds
@@ -94,9 +95,9 @@ void Ship::lookAtMouse(sf::RenderWindow &window){
     float dx = curPos.x - position.x;
     float dy = curPos.y - position.y;
 
-    float rotation = (atan2(dy, dx)) * 180 / PI;
+    float rotation = (atan2(dy, dx)) * 180u / PI;
 
-    shipSprite.setRotation(rotation + 180);
+    shipSprite.setRotation(rotation + 180u);
 
 }
 

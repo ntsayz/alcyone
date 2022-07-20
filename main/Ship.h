@@ -8,7 +8,7 @@
 
 class Ship{
     private:
-        const int shipWidth = 50 , shipLength = 50; 
+        const unsigned int shipWidth = 50 , shipLength = 50; 
         sf::Texture ship;
         sf::Sprite shipSprite;
         Bullet bullet(std::string fname);
