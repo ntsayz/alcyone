@@ -1,7 +1,5 @@
 #include "Ship.h"
 
-
-
 Ship::Ship(std::string fname, sf::Vector2u size){
 
     if(!ship.loadFromFile(fname)){
@@ -21,46 +19,45 @@ void Ship::draw(sf::RenderWindow &window){
 void Ship::update(sf::Event event, sf::Vector2u wsize){
     
     // set acceleration
-    if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code)
-      acceleration.y -= dAcc;
-    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code)
-      acceleration.x -= dAcc;
-    if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code)
-      acceleration.y += dAcc;
-    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code)
-      acceleration.x += dAcc;
+    if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code){acceleration.y -= dAcc;}
+    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code){acceleration.x -= dAcc; shipSprite.rotate(-0.05f);}
+    if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code){acceleration.y += dAcc; }
+    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(0.05f);}
+
+    //accelerate if it turns enough
+    //if(shipSprite.getRotation() > 0) acceleration.x +=0.01;
+
 
     // Collision with window bounds
     // takes in account size of the texture
-    sf::Vector2f reset;
+    sf::Vector2f reset ={x,y};
     if(x <= 0){
       x = 0;
       reset = {x,y};
-      velocity.x *=-1;
+      velocity.x *=-3;
       acceleration.x = 0;
       shipSprite.setPosition(reset);
     }
     else if(x >= wsize.x - shipWidth){
       x = wsize.x - shipWidth;
       reset = {x,y};
-      velocity.x *=-1;
+      velocity.x *=-3;
       acceleration.x = 0;
       shipSprite.setPosition(reset);
     }
     if(y <= 0){
       y = 0;
       reset = {x,y};
-      velocity.y *=-1;
+      velocity.y *=-3;
       acceleration.y = 0;
       shipSprite.setPosition(reset);
     }
     else if(y >= wsize.y - shipLength){
       y = wsize.y - shipLength;
       reset = {x,y};
-      velocity.y *=-1;
+      velocity.y *=-3;
       acceleration.y = 0;
       shipSprite.setPosition(reset);
-      
     }
 
     //changing velocity with acceleration and force of friction
@@ -80,7 +77,6 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
 
     showInfo();
     shipSprite.setPosition(x, y);
-
 
 }
 

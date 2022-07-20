@@ -4,20 +4,25 @@
 #include <iostream>
 #include <math.h>
 #include <string.h>
+#include "Bullet.h"
 
 class Ship{
     private:
         const int shipWidth = 50 , shipLength = 50; 
         sf::Texture ship;
         sf::Sprite shipSprite;
+        Bullet bullet(std::string fname);
         sf::Vector2f acceleration, velocity, direction, FRICTIONF = {0.0f,0.0f} , VMAXv = {2.0,2.0};
         float x,y , VMAX = 2.0;
         const float FRICTION_COEF = 0.4f, dAcc = 0.02f;
     public:
         Ship(std::string fname , sf::Vector2u size);
+
+        sf::Sprite shootBullet(sf::Event event);
         void draw( sf::RenderWindow &window);
-        void lookAtMouse(sf::RenderWindow &window);  
         void update(sf::Event event, sf::Vector2u wsize);
+
+        void lookAtMouse(sf::RenderWindow &window);  
         sf::Sprite const getShipSprite();
         sf::Vector2f const getShipPos();
         void showInfo() const{

@@ -7,7 +7,7 @@ int main()
     //CONSTANTS
     std::string PLAYER_FNAME = "resources/triangle.png";
     std::string BG_FNAME = "resources/starsbg.png";
-    sf::Vector2u WINDOW_SIZE(800,800);
+    sf::Vector2u WINDOW_SIZE(600,600);
 
     sf::Clock clock;
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "A");
@@ -30,7 +30,7 @@ int main()
         
 
         
-    // Process events
+    // process events
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -54,13 +54,10 @@ int main()
 
         //window.draw(back);
 
-
         ship.update(event,WINDOW_SIZE);
-        //ship.lookAtMouse(window); //very complicated bugs
         window.draw(ship.getShipSprite());
         
-        // Display window contents on screen
-        
+        // display window contents on screen
         window.display();
     }
 
