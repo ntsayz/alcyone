@@ -5,9 +5,9 @@
 int main()
 {
     //CONSTANTS
-    std::string PLAYER_FNAME = "resources/S001_1_36.png";
+    std::string PLAYER_FNAME = "resources/triangle.png";
     std::string BG_FNAME = "resources/starsbg.png";
-    sf::Vector2u WINDOW_SIZE(600,400);
+    sf::Vector2u WINDOW_SIZE(800,800);
 
     sf::Clock clock;
     sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "A");
@@ -48,12 +48,15 @@ int main()
         }
 
         // Clear the screen
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
 
         //float delta = clock.restart().asSeconds();
 
-        window.draw(back);
+        //window.draw(back);
+
+
         ship.update(event,WINDOW_SIZE);
+        //ship.lookAtMouse(window); //very complicated bugs
         window.draw(ship.getShipSprite());
         
         // Display window contents on screen
@@ -63,3 +66,50 @@ int main()
 
     return EXIT_SUCCESS;
 }
+
+/*
+void update(RenderWindow& window) 
+        {
+            float decceleration = 0.3;
+    
+            if (Keyboard::isKeyPressed(Keyboard::W))
+            {
+                accelerationY -= decceleration;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::S))
+            {
+                accelerationY += decceleration;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::A))
+            {
+                accelerationX -= decceleration;
+            }
+            if (Keyboard::isKeyPressed(Keyboard::D))
+            {
+                accelerationX += decceleration;
+            }
+    
+            dx += accelerationX;
+            dy += accelerationY;
+    
+            speed = sqrt(dx * dx + dy * dy);
+            if (speed > maxSpeed)
+            {
+                dx *= maxSpeed / speed;
+                dy *= maxSpeed / speed;
+            }
+    
+            x += dx;
+            y += dy;
+    
+            dx *= 0.9;
+            dy *= 0.9;
+    
+            accelerationX = 0;
+            accelerationY = 0;
+    
+            EntitySprite.setPosition(x, y);
+            window.draw(EntitySprite);
+    
+        }
+*/
