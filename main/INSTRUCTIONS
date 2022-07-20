@@ -1,12 +1,12 @@
 
 
 
+Compilation
+
+g++ main.cpp Ship.cpp Bullet.cpp Manager.cpp -lsfml-graphics -lsfml-window -lsfml-system
+
 NEEDED TO RUN
 
-g++ main.cpp Ship.cpp -lsfml-graphics -lsfml-window -lsfml-system
-
-./prog
+./a.out
 
 
-Permission to write
-chmod u+x example.sh
