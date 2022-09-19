@@ -6,9 +6,11 @@
 #include <string.h>
 #include "Bullet.h"
 
+
+
 class Ship{
     private:
-        const unsigned int shipWidth = 50 , shipLength = 50; 
+        const unsigned int shipWidth = 50 , shipLength = 50; //Asset size
         sf::Texture ship;
         sf::Sprite shipSprite;
         Bullet bullet(std::string fname);
@@ -31,7 +33,9 @@ class Ship{
             std::cout << "Position (" << x << "," << y <<")"  << std::endl;
             std::cout << "Velocity " << vnorm << "m/s " <<  std::endl;
             std::cout << "Aceleration " << anorm << "m/s²" << std::endl;
-            std::cout<< u8"\033[2J\033[1;1H" ;
+
+            
+            //std::cout<< u8"\033[2J\033[1;1H" ;
         }
 
 

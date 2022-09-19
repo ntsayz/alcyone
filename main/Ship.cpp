@@ -4,6 +4,7 @@ Ship::Ship(std::string fname, sf::Vector2u size){
 
     if(!ship.loadFromFile(fname)){
       std::cerr << "Failed to load a file" << std::endl;
+      
     }
     ship.setSmooth(true);
     shipSprite.setTexture(ship);
