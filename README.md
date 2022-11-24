@@ -7,7 +7,7 @@ This is a side project being currently developed, trying to use the knowledge ob
 
 ### TO-DO
 - Particles (Creating thrust and therefore justifying the ship's movement)
-- Rocket/Bullet (Should would affect the ship's momentum)
+- Rocket/Bullet (Should would affect the ship's momentum/inertia)
 - Planets (Should have a slight gravitational pull and it should thus affect the ship's trajectory)
 
 
