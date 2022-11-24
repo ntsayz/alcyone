@@ -2,7 +2,7 @@
 
 void Manager::startApplication(sf::Vector2u WINDOW_SIZE){
 
-    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "Space shooter");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_SIZE.x, WINDOW_SIZE.y), "unnamed untitled");
     window.setVerticalSyncEnabled(true);  //sync to monitor's refresh rate
     window.setFramerateLimit(60);
     startGame(window, WINDOW_SIZE);
