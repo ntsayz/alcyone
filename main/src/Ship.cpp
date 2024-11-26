@@ -14,79 +14,90 @@ Ship::Ship(std::string fname, sf::Vector2u size){
   shipSprite.setPosition(playerPos);
   shipSprite.setOrigin(shipWidth / 2.0f, shipLength / 2.0f);
 }
-
-void Ship::draw(sf::RenderWindow &window) {
-    // Draw particles
-    for (auto &particle : particles) {
-      particle.draw(window);
-    }
-    // Draw the ship
-    window.draw(shipSprite);
-}
 void Ship::update(sf::Event event, sf::Vector2u wsize, float deltaTime) {
-    // Handle input and emit particles
-    if (event.type == sf::Event::KeyPressed) {
-        // Get ship's rotation in radians
-        float rotation = shipSprite.getRotation();
-        float rotationRad = rotation * (3.14159265f / 180.0f);
+    // Get rotation and direction vectors
+    float rotation = shipSprite.getRotation();
+    float rotationRad = rotation * (3.14159265f / 180.0f);
+    sf::Vector2f forwardDirection(std::cos(rotationRad - 3.14159265f / 2), std::sin(rotationRad - 3.14159265f / 2));
+    sf::Vector2f rightDirection(-forwardDirection.y, forwardDirection.x);
 
-        // Calculate direction vectors
-        sf::Vector2f forwardDirection(std::cos(rotationRad - 3.14159265f / 2), std::sin(rotationRad - 3.14159265f / 2));
-        sf::Vector2f rightDirection(-forwardDirection.y, forwardDirection.x);
-
-        // Calculate half dimensions as floats
-        float halfShipWidth = static_cast<float>(shipWidth) / 2.0f;
-        float halfShipLength = static_cast<float>(shipLength) / 2.0f;
-
-        // set acceleration and emit particles
-        if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code) {
-            acceleration += forwardDirection * dAcc;
-
-            // Emit particle from rear
-            sf::Vector2f particlePosition = shipSprite.getPosition() - forwardDirection * halfShipLength;
-            sf::Vector2f particleVelocity = -forwardDirection * PARTICLE_SPEED;
-            particles.push_back(Particle(particlePosition, particleVelocity, PARTICLE_LIFETIME));
-        }
-        if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code) {
-            acceleration -= rightDirection * dAcc;
-            shipSprite.rotate(-ROTATION_RATE);
-
-            // Emit particle from right side
-            sf::Vector2f particlePosition = shipSprite.getPosition() + rightDirection * halfShipWidth;
-            sf::Vector2f particleVelocity = rightDirection * PARTICLE_SPEED;
-            particles.push_back(Particle(particlePosition, particleVelocity, PARTICLE_LIFETIME));
-        }
-        if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code) {
-            acceleration -= forwardDirection * dAcc;
-
-            // Emit particle from front
-            sf::Vector2f particlePosition = shipSprite.getPosition() + forwardDirection * halfShipLength;
-            sf::Vector2f particleVelocity = forwardDirection * PARTICLE_SPEED;
-            particles.push_back(Particle(particlePosition, particleVelocity, PARTICLE_LIFETIME));
-        }
-        if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code) {
-            acceleration += rightDirection * dAcc;
-            shipSprite.rotate(ROTATION_RATE);
-
-            // Emit particle from left side
-            sf::Vector2f particlePosition = shipSprite.getPosition() - rightDirection * halfShipWidth;
-            sf::Vector2f particleVelocity = -rightDirection * PARTICLE_SPEED;
-            particles.push_back(Particle(particlePosition, particleVelocity, PARTICLE_LIFETIME));
-        }
-
-        // limit rotation
-        if (shipSprite.getRotation() >= ROTATION_LIMIT)
-            shipSprite.setRotation(ROTATION_LIMIT);
-        if (shipSprite.getRotation() <= -ROTATION_LIMIT)
-            shipSprite.setRotation(-ROTATION_LIMIT);
-    }
+    // Handle input
+    handleKeyPress(event, rotationRad, forwardDirection, rightDirection);
 
     // Update particles
     updateParticles(deltaTime);
 
-    // Collision with window bounds
-    // (The collision logic remains the same as your original code)
+    // Apply acceleration and friction
+    if (abs(velocity.x) <= VMAXv.x && abs(velocity.y) <= VMAXv.y) {
+        velocity += acceleration;
+    }
+    FRICTIONF = FRICTION_COEF * velocity;
+    velocity -= FRICTIONF;
+
+    // Update position
+    x += velocity.x;
+    y += velocity.y;
+    shipSprite.setPosition(x, y);
+
+    // Handle collision
+    handleCollision(wsize);
+}
+
+void Ship::draw(sf::RenderWindow &window) {
+    for (auto &particle : particles) {
+        particle.draw(window);
+    }
+    window.draw(shipSprite);
+}
+
+void Ship::handleKeyPress(sf::Event event, float rotationRad, sf::Vector2f forwardDirection, sf::Vector2f rightDirection) {
+    if (event.type != sf::Event::KeyPressed) return;
+
+    float halfShipWidth = shipWidth / 2.0f;
+    float halfShipLength = shipLength / 2.0f;
+
+    // W or Up key for forward movement
+    if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code) {
+        acceleration += forwardDirection * dAcc;
+        sf::Vector2f particlePosition = shipSprite.getPosition() - forwardDirection * halfShipLength;
+        particles.push_back(Particle(particlePosition, -forwardDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
+    }
+
+    // A or Left key for rotation and side thrusters
+    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code) {
+        acceleration -= rightDirection * dAcc;
+        shipSprite.rotate(-ROTATION_RATE);
+        sf::Vector2f particlePosition = shipSprite.getPosition() + rightDirection * halfShipWidth;
+        particles.push_back(Particle(particlePosition, rightDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
+    }
+
+    // S or Down key for reverse thrust
+    if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code) {
+        acceleration -= forwardDirection * dAcc;
+        sf::Vector2f particlePosition = shipSprite.getPosition() + forwardDirection * halfShipLength;
+        particles.push_back(Particle(particlePosition, forwardDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
+    }
+
+    // D or Right key for rotation and side thrusters
+    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code) {
+        acceleration += rightDirection * dAcc;
+        shipSprite.rotate(ROTATION_RATE);
+        sf::Vector2f particlePosition = shipSprite.getPosition() - rightDirection * halfShipWidth;
+        particles.push_back(Particle(particlePosition, -rightDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
+    }
+
+    // Limit rotation
+    if (shipSprite.getRotation() >= ROTATION_LIMIT) {
+        shipSprite.setRotation(ROTATION_LIMIT);
+    }
+    if (shipSprite.getRotation() <= -ROTATION_LIMIT) {
+        shipSprite.setRotation(-ROTATION_LIMIT);
+    }
+}
+
+void Ship::handleCollision(sf::Vector2u wsize) {
     sf::Vector2f reset = sf::Vector2f(x, y);
+
     if (x <= 0) {
         x = 0;
         reset = sf::Vector2f(x, y);
@@ -100,6 +111,7 @@ void Ship::update(sf::Event event, sf::Vector2u wsize, float deltaTime) {
         acceleration.x = 0;
         shipSprite.setPosition(reset);
     }
+
     if (y <= 0) {
         y = 0;
         reset = sf::Vector2f(x, y);
@@ -113,19 +125,6 @@ void Ship::update(sf::Event event, sf::Vector2u wsize, float deltaTime) {
         acceleration.y = 0;
         shipSprite.setPosition(reset);
     }
-
-    // Updating velocity with acceleration and friction
-    if (abs(velocity.x) <= VMAXv.x && abs(velocity.y) <= VMAXv.y) {
-        velocity += acceleration;
-    }
-    FRICTIONF = FRICTION_COEF * velocity;
-    velocity -= FRICTIONF;
-
-    // Update position through velocity
-    x += velocity.x;
-    y += velocity.y;
-
-    shipSprite.setPosition(x, y);
 }
 
 void Ship::updateParticles(float deltaTime) {
@@ -139,29 +138,10 @@ void Ship::updateParticles(float deltaTime) {
     }
 }
 
-
-
-void Ship::lookAtMouse(sf::RenderWindow &window){
-    sf::Vector2f curPos = shipSprite.getPosition();
-    sf::Vector2i position = sf::Mouse::getPosition(window);
-
-    // now we have both the sprite position and the cursor
-    // position lets do the calculation so our sprite will
-    // face the position of the mouse
-    const float PI = 3.14159265;
-
-    float dx = curPos.x - position.x;
-    float dy = curPos.y - position.y;
-
-    float rotation = (atan2(dy, dx)) * 180u / PI;
-
-    shipSprite.setRotation(rotation + 180u);
-
-}
-
-sf::Vector2f const Ship::getShipPos(){
+sf::Vector2f const Ship::getShipPos() {
     return shipSprite.getPosition();
 }
-sf::Sprite const Ship::getShipSprite(){
-  return shipSprite;
+
+sf::Sprite const Ship::getShipSprite() {
+    return shipSprite;
 }
