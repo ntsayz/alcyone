@@ -13,7 +13,6 @@ Utils::Utils() {
 
 
 std::string Utils::getResourcePath(const std::string &filename) {
-    
     std::string executablePath = std::filesystem::current_path().string();
     return executablePath + "/resources/" + filename;
 }
