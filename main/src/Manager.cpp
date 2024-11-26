@@ -10,41 +10,29 @@ void Manager::startApplication(sf::Vector2u WINDOW_SIZE){
 }
 
 
-void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
-    Utils& utils = Utils::getInstance();
-    //FILES TO LOAD
-    std::string PLAYER_FNAME = utils.getResourcePath("triangle.png");
-    std::string BG_FNAME = utils.getResourcePath("starsbg.png");
+void Manager::startGame(sf::RenderWindow &window, sf::Vector2u WINDOW_SIZE) {
+    Utils &utils = Utils::getInstance();
+    std::string PLAYER_FNAME = utils.getResourcePath("rectangle.png");
 
     Ship ship(PLAYER_FNAME, WINDOW_SIZE);
-    
-    while (window.isOpen()){
-    // process events
+    sf::Clock deltaClock;
+
+    while (window.isOpen()) {
+        float deltaTime = deltaClock.restart().asSeconds();
+
         sf::Event event;
-        while (window.pollEvent(event))
-        {
-            switch(event.type){
-                case sf::Event::Closed:
-                    window.close();
-                    break;
-                default:
-                    break;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
             }
         }
 
-        // Clear the screen
+        ship.update(event,WINDOW_SIZE,deltaTime);
+        ship.updateParticles(deltaTime);           // Keep particle updates separate
         window.clear(sf::Color::White);
-
-        ship.update(event,WINDOW_SIZE);
-        window.draw(ship.getShipSprite());
-        
-        // display window contents on screen
+        ship.draw(window);
         window.display();
     }
-    
-
-    
-
 }
 
 sf::Sprite Manager::loadBackground(std::string BG_FNAME){
