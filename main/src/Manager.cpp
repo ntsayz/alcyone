@@ -11,9 +11,10 @@ void Manager::startApplication(sf::Vector2u WINDOW_SIZE){
 
 
 void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
+    Utils& utils = Utils::getInstance();
     //FILES TO LOAD
-    std::string PLAYER_FNAME = "resources/triangle.png";
-    std::string BG_FNAME = "resources/starsbg.png";
+    std::string PLAYER_FNAME = utils.getResourcePath("triangle.png");
+    std::string BG_FNAME = utils.getResourcePath("starsbg.png");
 
     Ship ship(PLAYER_FNAME, WINDOW_SIZE);
     

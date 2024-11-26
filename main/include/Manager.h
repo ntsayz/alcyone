@@ -3,6 +3,7 @@
 
 #include "Ship.h"
 #include "Bullet.h"
+#include "Utils.h"
 #include <SFML/Graphics.hpp>
 #include <string.h>
 
