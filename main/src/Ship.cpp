@@ -21,9 +21,9 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
     
     // set acceleration
     if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code){acceleration.y -= dAcc;}
-    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code){acceleration.x -= dAcc; shipSprite.rotate(-0.06f);}
+    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code){acceleration.x -= dAcc; shipSprite.rotate(-ROTATION_RATE);}
     if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code){acceleration.y += dAcc; }
-    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(0.06f);}
+    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(ROTATION_RATE);}
 
     // limit rotation
     if(shipSprite.getRotation() == ROTATION_LIMIT ) shipSprite.setRotation(ROTATION_LIMIT);
