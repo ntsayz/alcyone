@@ -40,7 +40,7 @@ void Ship::update(sf::Event event, sf::Vector2u wsize, float deltaTime) {
     shipSprite.setPosition(x, y);
 
     // Handle collision
-    handleCollision(wsize);
+    //handleCollision(wsize);
 }
 
 void Ship::draw(sf::RenderWindow &window) {
@@ -56,14 +56,14 @@ void Ship::handleKeyPress(sf::Event event, float rotationRad, sf::Vector2f forwa
     float halfShipWidth = shipWidth / 2.0f;
     float halfShipLength = shipLength / 2.0f;
 
-    // W or Up key for forward movement
+
     if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code) {
         acceleration += forwardDirection * dAcc;
         sf::Vector2f particlePosition = shipSprite.getPosition() - forwardDirection * halfShipLength;
         particles.push_back(Particle(particlePosition, -forwardDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
     }
 
-    // A or Left key for rotation and side thrusters
+    
     if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code) {
         acceleration -= rightDirection * dAcc;
         shipSprite.rotate(-ROTATION_RATE);
@@ -71,14 +71,14 @@ void Ship::handleKeyPress(sf::Event event, float rotationRad, sf::Vector2f forwa
         particles.push_back(Particle(particlePosition, rightDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
     }
 
-    // S or Down key for reverse thrust
+    
     if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code) {
         acceleration -= forwardDirection * dAcc;
         sf::Vector2f particlePosition = shipSprite.getPosition() + forwardDirection * halfShipLength;
         particles.push_back(Particle(particlePosition, forwardDirection * PARTICLE_SPEED, PARTICLE_LIFETIME));
     }
 
-    // D or Right key for rotation and side thrusters
+    
     if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code) {
         acceleration += rightDirection * dAcc;
         shipSprite.rotate(ROTATION_RATE);

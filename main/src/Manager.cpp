@@ -25,14 +25,12 @@ void Manager::startGame(sf::RenderWindow &window, sf::Vector2u WINDOW_SIZE) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-             // Refactored input handling
         }
 
         ship.update(event,WINDOW_SIZE,deltaTime);
         ship.updateParticles(deltaTime);           // Keep particle updates separate
-
         window.clear(sf::Color::White);
-        ship.draw(window); // Refactored rendering logic
+        ship.draw(window);
         window.display();
     }
 }
