@@ -32,7 +32,7 @@ class Ship{
         void showInfo() const{
             float vnorm = sqrt(pow(velocity.x,2)+pow(velocity.y,2));
             float anorm = sqrt(pow(acceleration.x,2)+pow(acceleration.y,2));
-            std::cout << "Position (" << x << "," << y <<")"  << std::endl;
+            std::cout << "Position (" << x << " , " << y <<")"  << std::endl;
             std::cout << "Velocity " << vnorm << "m/s " <<  std::endl;
             std::cout << "Aceleration " << anorm << "m/s²" << std::endl;
             //std::cout<< u8"\033[2J\033[1;1H" ;
