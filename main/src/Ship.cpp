@@ -25,9 +25,9 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
     if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code){acceleration.y += dAcc; }
     if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(0.06f);}
 
-    // stop rotation
-    if(shipSprite.getRotation() == 0.05f) shipSprite.setRotation(0.05f);
-    if(shipSprite.getRotation() == -0.05f) shipSprite.setRotation(-0.05f);
+    // limit rotation
+    if(shipSprite.getRotation() == ROTATION_LIMIT ) shipSprite.setRotation(ROTATION_LIMIT);
+    if(shipSprite.getRotation() == -ROTATION_LIMIT) shipSprite.setRotation(-ROTATION_LIMIT);
 
 
     // Collision with window bounds
