@@ -1,45 +1,29 @@
 #ifndef SHIP_H
 #define SHIP_H
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <math.h>
-#include <string.h>
-#include "Bullet.h"
+#include <cmath>
 
+class Ship {
+public:
+    Ship(const std::string& filename, const sf::Vector2u& windowSize);
+    void handleInput();
+    void update(float deltaTime, const sf::Vector2u& windowSize);
+    void draw(sf::RenderWindow& window);
+    sf::Vector2f getPosition() const;
+    const sf::Sprite& getSprite() const;
 
-
-class Ship{
-    private:
-        const unsigned int shipWidth = 50 , shipLength = 50; //Asset size
-        sf::Texture ship;
-        sf::Sprite shipSprite;
-        Bullet bullet(std::string fname);
-        sf::Vector2f acceleration, velocity, direction;
-        sf::Vector2f FRICTIONF = sf::Vector2f(0.0f, 0.0f);
-        sf::Vector2f VMAXv = sf::Vector2f(2.0f, 2.0f);
-        float x,y , VMAX = 2.0;
-        const float FRICTION_COEF = 0.4f, dAcc = 0.02f;
-    public:
-        Ship(std::string fname , sf::Vector2u size);
-
-        sf::Sprite shootBullet(sf::Event event);
-        void draw( sf::RenderWindow &window);
-        void update(sf::Event event, sf::Vector2u wsize);
-
-        void lookAtMouse(sf::RenderWindow &window);  
-        sf::Sprite const getShipSprite();
-        sf::Vector2f const getShipPos();
-        void showInfo() const{
-            float vnorm = sqrt(pow(velocity.x,2)+pow(velocity.y,2));
-            float anorm = sqrt(pow(acceleration.x,2)+pow(acceleration.y,2));
-            std::cout << "Position (" << x << " , " << y <<")"  << std::endl;
-            std::cout << "Velocity " << vnorm << "m/s " <<  std::endl;
-            std::cout << "Aceleration " << anorm << "m/s²" << std::endl;
-            //std::cout<< u8"\033[2J\033[1;1H" ;
-        }
-
-
+private:
+    sf::Texture shipTexture;
+    sf::Sprite shipSprite;
+    sf::Vector2f position;
+    sf::Vector2f velocity;
+    sf::Vector2f acceleration;
+    float rotationSpeed;
+    float maxSpeed;
+    float accelerationRate;
+    float frictionCoefficient;
 };
 
-
-#endif
+#endif // SHIP_H
