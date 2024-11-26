@@ -2,6 +2,7 @@
 #define PARTICLE_H
 
 #include <SFML/Graphics.hpp>
+#include <Utils.h>
 
 class Particle {
 public:

@@ -28,7 +28,7 @@ class Ship{
 
         sf::Sprite shootBullet(sf::Event event);
         void draw( sf::RenderWindow &window);
-        void update(sf::Event event, sf::Vector2u wsize);
+        void update(sf::Event event, sf::Vector2u wsize, float deltaTime);
 
         void lookAtMouse(sf::RenderWindow &window);  
         sf::Sprite const getShipSprite();

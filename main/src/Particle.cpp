@@ -3,12 +3,13 @@
 
 sf::Texture Particle::particleTexture;
 bool Particle::textureLoaded = false;
+Utils& utils = Utils::getInstance();
 
 // Particle class implementation
 Particle::Particle(sf::Vector2f position, sf::Vector2f velocity, float lifetime)
     : velocity(velocity), lifetime(lifetime) {
     if (!textureLoaded) {
-        if (!particleTexture.loadFromFile("particle.png")) {
+        if (!particleTexture.loadFromFile(utils.getResourcePath("particle.png"))) {
             std::cerr << "Failed to load particle.png" << std::endl;
         }
         textureLoaded = true;

@@ -17,9 +17,12 @@ void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
     std::string BG_FNAME = utils.getResourcePath("starsbg.png");
 
     Ship ship(PLAYER_FNAME, WINDOW_SIZE);
+
+    sf::Clock deltaClock;
     
     while (window.isOpen()){
-    // process events
+        float deltaTime = deltaClock.restart().asSeconds();
+        // process events
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -30,13 +33,14 @@ void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
                 default:
                     break;
             }
+            ship.update(event, WINDOW_SIZE, deltaTime);
         }
 
         // Clear the screen
         window.clear(sf::Color::White);
-
-        ship.update(event,WINDOW_SIZE);
-        window.draw(ship.getShipSprite());
+        ship.draw(window);
+        
+        //window.draw(ship.getShipSprite());
         
         // display window contents on screen
         window.display();
