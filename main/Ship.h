@@ -14,7 +14,9 @@ class Ship{
         sf::Texture ship;
         sf::Sprite shipSprite;
         Bullet bullet(std::string fname);
-        sf::Vector2f acceleration, velocity, direction, FRICTIONF = {0.0f,0.0f} , VMAXv = {2.0,2.0};
+        sf::Vector2f acceleration, velocity, direction;
+        sf::Vector2f FRICTIONF = sf::Vector2f(0.0f, 0.0f);
+        sf::Vector2f VMAXv = sf::Vector2f(2.0f, 2.0f);
         float x,y , VMAX = 2.0;
         const float FRICTION_COEF = 0.4f, dAcc = 0.02f;
     public:

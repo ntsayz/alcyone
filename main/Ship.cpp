@@ -32,31 +32,31 @@ void Ship::update(sf::Event event, sf::Vector2u wsize){
 
     // Collision with window bounds
     // takes in account size of the texture
-    sf::Vector2f reset ={x,y};
+    sf::Vector2f reset = sf::Vector2f(x, y);
     if(x <= 0){
       x = 0;
-      reset = {x,y};
+      reset = sf::Vector2f(x, y);
       velocity.x *=-3;
       acceleration.x = 0;
       shipSprite.setPosition(reset);
     }
     else if(x >= wsize.x - shipWidth){
       x = wsize.x - shipWidth;
-      reset = {x,y};
+      reset = sf::Vector2f(x, y);
       velocity.x *=-3;
       acceleration.x = 0;
       shipSprite.setPosition(reset);
     }
     if(y <= 0){
       y = 0;
-      reset = {x,y};
+      reset = sf::Vector2f(x, y);
       velocity.y *=-3;
       acceleration.y = 0;
       shipSprite.setPosition(reset);
     }
     else if(y >= wsize.y - shipLength){
       y = wsize.y - shipLength;
-      reset = {x,y};
+      reset = sf::Vector2f(x, y);
       velocity.y *=-3;
       acceleration.y = 0;
       shipSprite.setPosition(reset);
