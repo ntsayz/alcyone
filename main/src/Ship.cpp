@@ -1,108 +1,110 @@
 #include "Ship.h"
 
-Ship::Ship(const std::string& filename, const sf::Vector2u& windowSize)
-    : position(windowSize.x / 2.0f, windowSize.y / 2.0f),
-      velocity(0.0f, 0.0f),
-      acceleration(0.0f, 0.0f),
-      rotationSpeed(100.0f),
-      maxSpeed(300.0f),
-      accelerationRate(600.0f),
-      frictionCoefficient(5.0f) {
-    if (!shipTexture.loadFromFile(filename)) {
-        std::cerr << "Failed to load file: " << filename << std::endl;
+Ship::Ship(std::string fname, sf::Vector2u size){
+
+    if(!ship.loadFromFile(fname)){
+      std::cerr << "Failed to load a file" << std::endl;
+      
     }
-    shipTexture.setSmooth(true);
-    shipSprite.setTexture(shipTexture);
-    shipSprite.setOrigin(shipTexture.getSize().x / 2.0f, shipTexture.getSize().y / 2.0f);
-    shipSprite.setPosition(position);
+    ship.setSmooth(true);
+    shipSprite.setTexture(ship);
+    x = size.x/2u;
+    y = size.y/2u;
+    sf::Vector2f playerPos(x,y);
+    shipSprite.setPosition(playerPos);
+    }
+
+void Ship::draw(sf::RenderWindow &window){
+  window.draw(shipSprite);
+}
+void Ship::update(sf::Event event, sf::Vector2u wsize){
+    
+    // set acceleration
+    if (sf::Keyboard::Key::W == event.key.code || sf::Keyboard::Key::Up == event.key.code){acceleration.y -= dAcc;}
+    if (sf::Keyboard::Key::A == event.key.code || sf::Keyboard::Key::Left == event.key.code){acceleration.x -= dAcc; shipSprite.rotate(-0.06f);}
+    if (sf::Keyboard::Key::S == event.key.code || sf::Keyboard::Key::Down == event.key.code){acceleration.y += dAcc; }
+    if (sf::Keyboard::Key::D == event.key.code || sf::Keyboard::Key::Right == event.key.code){acceleration.x += dAcc;shipSprite.rotate(0.06f);}
+
+    // stop rotation
+    if(shipSprite.getRotation() == 0.05f) shipSprite.setRotation(0.05f);
+    if(shipSprite.getRotation() == -0.05f) shipSprite.setRotation(-0.05f);
+
+
+    // Collision with window bounds
+    // takes in account size of the texture
+    sf::Vector2f reset = sf::Vector2f(x, y);
+    if(x <= 0){
+      x = 0;
+      reset = sf::Vector2f(x, y);
+      velocity.x *=-3;
+      acceleration.x = 0;
+      shipSprite.setPosition(reset);
+    }
+    else if(x >= wsize.x - shipWidth){
+      x = wsize.x - shipWidth;
+      reset = sf::Vector2f(x, y);
+      velocity.x *=-3;
+      acceleration.x = 0;
+      shipSprite.setPosition(reset);
+    }
+    if(y <= 0){
+      y = 0;
+      reset = sf::Vector2f(x, y);
+      velocity.y *=-3;
+      acceleration.y = 0;
+      shipSprite.setPosition(reset);
+    }
+    else if(y >= wsize.y - shipLength){
+      y = wsize.y - shipLength;
+      reset = sf::Vector2f(x, y);
+      velocity.y *=-3;
+      acceleration.y = 0;
+      shipSprite.setPosition(reset);
+    }
+
+    //changing velocity with acceleration and force of friction
+
+    //when I change the condition to make it more readable, it stops working 
+    if(abs(velocity.x) > VMAXv.x || abs(velocity.y) > VMAXv.y){
+    }else{
+      velocity += acceleration;
+    }
+    FRICTIONF = FRICTION_COEF * velocity;
+    velocity -= FRICTIONF;
+
+    
+    // update position through velocity 
+    x += velocity.x;
+    y += velocity.y;
+
+    showInfo();
+    shipSprite.setPosition(x, y);
+
 }
 
-void Ship::handleInput() {
-    acceleration = sf::Vector2f(0.0f, 0.0f);
 
-    // Movement input
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-        acceleration.y -= accelerationRate;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-        acceleration.y += accelerationRate;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-        acceleration.x -= accelerationRate;
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-        sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-        acceleration.x += accelerationRate;
-    }
 
-    // Rotation input
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-        shipSprite.rotate(-rotationSpeed * 0.016f);
-    }
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-        shipSprite.rotate(rotationSpeed * 0.016f);
-    }
+void Ship::lookAtMouse(sf::RenderWindow &window){
+    sf::Vector2f curPos = shipSprite.getPosition();
+    sf::Vector2i position = sf::Mouse::getPosition(window);
+
+    // now we have both the sprite position and the cursor
+    // position lets do the calculation so our sprite will
+    // face the position of the mouse
+    const float PI = 3.14159265;
+
+    float dx = curPos.x - position.x;
+    float dy = curPos.y - position.y;
+
+    float rotation = (atan2(dy, dx)) * 180u / PI;
+
+    shipSprite.setRotation(rotation + 180u);
+
 }
 
-void Ship::update(float deltaTime, const sf::Vector2u& windowSize) {
-    // Update velocity with acceleration
-    velocity += acceleration * deltaTime;
-
-    // Apply friction to slow down the ship when no input is given
-    if (velocity.x != 0.0f || velocity.y != 0.0f) {
-        sf::Vector2f friction = velocity * frictionCoefficient * deltaTime;
-        if (std::abs(friction.x) > std::abs(velocity.x))
-            velocity.x = 0.0f;
-        else
-            velocity.x -= friction.x;
-
-        if (std::abs(friction.y) > std::abs(velocity.y))
-            velocity.y = 0.0f;
-        else
-            velocity.y -= friction.y;
-    }
-
-    // Limit speed to maxSpeed
-    float speed = std::hypot(velocity.x, velocity.y);
-    if(speed > maxSpeed) {
-        velocity *= maxSpeed / speed;
-    }
-
-    // Update position
-    position += velocity * deltaTime;
-
-    // Collision detection with window bounds
-    sf::FloatRect bounds = shipSprite.getGlobalBounds();
-    if (position.x - bounds.width / 2 < 0) {
-        position.x = bounds.width / 2;
-        velocity.x = -velocity.x * 0.5f; // Bounce back with damping
-    } else if (position.x + bounds.width / 2 > windowSize.x) {
-        position.x = windowSize.x - bounds.width / 2;
-        velocity.x = -velocity.x * 0.5f;
-    }
-    if (position.y - bounds.height / 2 < 0) {
-        position.y = bounds.height / 2;
-        velocity.y = -velocity.y * 0.5f;
-    } else if (position.y + bounds.height / 2 > windowSize.y) {
-        position.y = windowSize.y - bounds.height / 2;
-        velocity.y = -velocity.y * 0.5f;
-    }
-
-    // Update sprite position
-    shipSprite.setPosition(position);
+sf::Vector2f const Ship::getShipPos(){
+    return shipSprite.getPosition();
 }
-
-void Ship::draw(sf::RenderWindow& window) {
-    window.draw(shipSprite);
-}
-
-sf::Vector2f Ship::getPosition() const {
-    return position;
-}
-
-const sf::Sprite& Ship::getSprite() const {
-    return shipSprite;
+sf::Sprite const Ship::getShipSprite(){
+  return shipSprite;
 }
