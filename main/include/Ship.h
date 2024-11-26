@@ -35,8 +35,6 @@ class Ship{
             std::cout << "Position (" << x << "," << y <<")"  << std::endl;
             std::cout << "Velocity " << vnorm << "m/s " <<  std::endl;
             std::cout << "Aceleration " << anorm << "m/s²" << std::endl;
-
-            
             //std::cout<< u8"\033[2J\033[1;1H" ;
         }
 
