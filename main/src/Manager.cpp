@@ -13,7 +13,7 @@ void Manager::startApplication(sf::Vector2u WINDOW_SIZE){
 void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
     Utils& utils = Utils::getInstance();
     //FILES TO LOAD
-    std::string PLAYER_FNAME = utils.getResourcePath("triangle.png");
+    std::string PLAYER_FNAME = utils.getResourcePath("rectangle.png");
     std::string BG_FNAME = utils.getResourcePath("starsbg.png");
 
     Ship ship(PLAYER_FNAME, WINDOW_SIZE);
@@ -33,8 +33,9 @@ void Manager::startGame(sf::RenderWindow &window ,sf::Vector2u WINDOW_SIZE){
                 default:
                     break;
             }
-            ship.update(event, WINDOW_SIZE, deltaTime);
+            
         }
+        ship.update(event, WINDOW_SIZE, deltaTime);
 
         // Clear the screen
         window.clear(sf::Color::White);
