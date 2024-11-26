@@ -5,6 +5,7 @@
 #include <math.h>
 #include <string.h>
 #include "Bullet.h"
+#include "Particle.h"
 
 
 
@@ -19,6 +20,9 @@ class Ship{
         sf::Vector2f VMAXv = sf::Vector2f(2.0f, 2.0f);
         float x,y , VMAX = 2.0;
         const float FRICTION_COEF = 0.4f, dAcc = 0.02f, ROTATION_LIMIT = 0.05f, ROTATION_RATE = 0.06f;
+        const float PARTICLE_SPEED = 100.0f; // Adjust as needed
+        const float PARTICLE_LIFETIME = 1.0f;
+        std::vector<Particle> particles;
     public:
         Ship(std::string fname , sf::Vector2u size);
 
@@ -37,7 +41,8 @@ class Ship{
             std::cout << "Aceleration " << anorm << "m/s²" << std::endl;
             //std::cout<< u8"\033[2J\033[1;1H" ;
         }
-
+    private:
+        void updateParticles(float deltaTime);
 
 };
 
